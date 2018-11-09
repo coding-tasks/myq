@@ -80,3 +80,19 @@ Commands: TL, A, C, A, C, TR, A, C
 | Visited | Cleaned | Final | Battery |
 | ------- | ------- | ----- | -------- |
 | (3, 0), (2, 0), (1, 0), (1, 1) | (2, 0), (1, 0), (1, 1) | (1, 1) facing East | 54 |
+
+### Contributing
+1. Install Dependencies
+    ```shell
+    $ composer install
+    ```
+
+2. Run tests with phpunit
+    ```shell
+    $ ./vendor/bin/phpunit
+    ```
+
+3. Validate changes against [PSR2 Coding Standards](http://www.php-fig.org/psr/psr-2/).
+    ```shell
+    $ ./vendor/bin/php-cs-fixer fix <changes> --rules=@PSR2,not_operator_with_space,single_quote
+    ```

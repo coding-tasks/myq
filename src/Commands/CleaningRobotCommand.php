@@ -59,7 +59,7 @@ class CleaningRobotCommand extends Command
             }
         } catch (OutOfBatteryException | ObstacleException $e) {
             // Log error.
-            $output->writeln("Error: " . $e->getMessage());
+            $output->writeln('Error: ' . $e->getMessage());
         }
     }
 }

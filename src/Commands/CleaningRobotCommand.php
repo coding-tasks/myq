@@ -3,6 +3,8 @@
 namespace MyQ\Commands;
 
 use MyQ\CleaningRobot;
+use MyQ\Exception\ObstacleException;
+use MyQ\Exception\OutOfBatteryException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,12 +49,17 @@ class CleaningRobotCommand extends Command
 
         $robot = new CleaningRobot($source);
 
-        $metrics = $robot->run();
+        try {
+            $metrics = $robot->run();
 
-        $status = file_put_contents($result, json_encode($metrics));
+            $status = file_put_contents($result, json_encode($metrics));
 
-        if (false !== $status) {
-            $output->writeln("Output saved to $result.");
+            if (false !== $status) {
+                $output->writeln("Output saved to $result.");
+            }
+        } catch (OutOfBatteryException | ObstacleException $e) {
+            // Log error.
+            $output->writeln("Error: " . $e->getMessage());
         }
     }
 }

@@ -3,6 +3,7 @@
 namespace MyQ\Commands;
 
 use MyQ\CleaningRobot;
+use MyQ\Exception\BackOffException;
 use MyQ\Exception\ObstacleException;
 use MyQ\Exception\OutOfBatteryException;
 use Symfony\Component\Console\Command\Command;
@@ -57,7 +58,7 @@ class CleaningRobotCommand extends Command
             if (false !== $status) {
                 $output->writeln("Output saved to $result.");
             }
-        } catch (OutOfBatteryException | ObstacleException $e) {
+        } catch (OutOfBatteryException | ObstacleException | BackOffException $e) {
             // Log error.
             $output->writeln('Error: ' . $e->getMessage());
         }

@@ -3,6 +3,7 @@
 namespace MyQ;
 
 use MyQ\Exception\FileException;
+use MyQ\Exception\BackOffException;
 use MyQ\Exception\ObstacleException;
 use MyQ\Exception\OutOfBatteryException;
 
@@ -89,7 +90,7 @@ class CleaningRobot
      */
     private function init()
     {
-        $json = file_get_contents($this->source);
+        $json = @file_get_contents($this->source);
 
         if ( ! $json) {
             throw new FileException('Invalid source file.');
@@ -415,7 +416,7 @@ class CleaningRobot
                 break;
 
             default:
-                throw new ObstacleException('Cannot back off');
+                throw new BackOffException('Cannot back off.');
         }
     }
 

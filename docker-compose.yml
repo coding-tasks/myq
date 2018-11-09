@@ -1,0 +1,17 @@
+---
+version: '3'
+
+services:
+  myq:
+    build: .
+    container_name: myq
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www
+      - ./.data/composer:/root/.composer
+      - ./.data/logs:/var/log/nginx
+    entrypoint: /usr/bin/entrypoint.sh
+    labels:
+      tag: myq
+      group: myq

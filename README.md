@@ -11,6 +11,11 @@ $ composer require myq/cleaning-robot
 You can use `cleaning_robot` command to run the app in cli. The command accepts source and result file.
 ```shell
 $ ./myq cleaning_robot </path/to/source.json> </path/to/result.json>
+
+Cleaning Robot in Action
+========================
+
+Output saved to </path/to/result.json>.
 ```
 
 Help file can be accessed as below.
@@ -47,6 +52,17 @@ $bot = new MyQ\Robot($sourcePath);
 $output = $bot->run();
 ```
 
+### Running the Project Locally
+Setup docker and docker-compose in your system if you haven't already.
+```shell
+$ docker-compose up -d
+```
+
+Once the containers are up and running, you can either login to the bash and execute `cleaning_robot` command, or, you can directly execute it like shown below.
+```shell
+$ docker exec -it myq bash -c "./myq cleaning_robot ./source.json ./results.json"
+```
+
 ### Direction Map
 | Direction | Left | Right |
 | --------- | ---- | ----- |
@@ -63,36 +79,20 @@ $output = $bot->run();
 | S (2, 0)  | S (2, 1)  | S (2, 2)  | S (2, 3)  |
 | S (3, 0)  | null (3, 1)  | S (3, 2)  | S (3, 3)  |
 
-Commands: TL, A, C, A, C, TR, A, C
+**Commands:** TL, A, C, A, C, TR, A, C
 
-- Start: (3, 0) facing North, battery 80
-- TL: West, battery 79
-- A: Obstacle, battery 77
-    - TR: North, battery 76
-    - A: Advance to (2, 0) facing North, battery 74
-- C: Cleaned (2, 0), battery 69
-- A: (1, 0) facing North, batter 67
-- C: Cleaned (1, 0), battery 62
-- TR: East, battery 61
-- A: (1, 1) facing East, battery 59
-- C: Cleaned (1, 1), battery 54
+- **Start:** (3, 0) facing North, battery 80
+- **TL:** West, battery 79
+- **A:** Obstacle, battery 77
+    - **TR:** North, battery 76
+    - **A:** Advance to (2, 0) facing North, battery 74
+- **C:** Cleaned (2, 0), battery 69
+- **A:** (1, 0) facing North, batter 67
+- **C:** Cleaned (1, 0), battery 62
+- **TR:** East, battery 61
+- **A:** (1, 1) facing East, battery 59
+- **C:** Cleaned (1, 1), battery 54
 
 | Visited | Cleaned | Final | Battery |
 | ------- | ------- | ----- | -------- |
 | (3, 0), (2, 0), (1, 0), (1, 1) | (2, 0), (1, 0), (1, 1) | (1, 1) facing East | 54 |
-
-### Contributing
-1. Install Dependencies
-    ```shell
-    $ composer install
-    ```
-
-2. Run tests with phpunit
-    ```shell
-    $ ./vendor/bin/phpunit
-    ```
-
-3. Validate changes against [PSR2 Coding Standards](http://www.php-fig.org/psr/psr-2/).
-    ```shell
-    $ ./vendor/bin/php-cs-fixer fix <changes> --rules=@PSR2,not_operator_with_space,single_quote
-    ```

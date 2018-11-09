@@ -1,0 +1,36 @@
+{
+  "name": "myq/cleaning-robot",
+  "description": "MyQ cleaning robot.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ankit Pokhrel",
+      "email": "hello@ankit.pl"
+    }
+  ],
+  "require": {
+    "php": "^7.1.3",
+    "symfony/console": "^4.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "6.5.x-dev",
+    "friendsofphp/php-cs-fixer": "^2.9@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "MyQ\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MyQ\\Test\\": "tests/"
+    }
+  },
+  "config": {
+    "optimize-autoloader": true
+  },
+  "bin": [
+    "./myq"
+  ]
+}

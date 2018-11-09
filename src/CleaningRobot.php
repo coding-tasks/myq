@@ -3,6 +3,7 @@
 namespace MyQ;
 
 use MyQ\Exception\FileException;
+use MyQ\Exception\ObstacleException;
 use MyQ\Exception\OutOfBatteryException;
 
 class CleaningRobot
@@ -65,6 +66,9 @@ class CleaningRobot
 
     /** @var array Visited cells. */
     protected $visited = [];
+
+    /** @var array Cleaned cells. */
+    protected $cleaned = [];
 
     /**
      * CleaningRobot constructor.
@@ -140,17 +144,102 @@ class CleaningRobot
     }
 
     /**
+     * Get battery.
+     *
+     * @param string $direction
+     *
+     * @return self
+     */
+    public function setDirection(string $direction) : self
+    {
+        $this->direction = $direction;
+
+        return $this;
+    }
+
+    /**
+     * Get direction.
+     *
+     * @return array
+     */
+    public function getPosition() : array
+    {
+        return $this->position;
+    }
+
+    /**
+     * Get visited.
+     *
+     * @return array
+     */
+    public function getVisited() : array
+    {
+        return $this->visited;
+    }
+
+    /**
+     * Get cleaned.
+     *
+     * @return array
+     */
+    public function getCleaned() : array
+    {
+        return $this->cleaned;
+    }
+
+    /**
      * Run commands in given order.
      *
      * @return array
      */
     public function run() : array
     {
-        // @TODO
+        foreach ($this->commands as $command) {
+            switch ($command) {
+                case 'TL':
+                    $this->turnLeft();
+                    break;
+
+                case 'TR':
+                    $this->turnRight();
+                    break;
+
+                case 'A':
+                    try {
+                        $this->advance();
+                    } catch (ObstacleException $e) {
+                        $attempt = 0;
+
+                        do {
+                            try {
+                                $this->backOff($attempt);
+                                break;
+                            } catch (ObstacleException $e) {
+                                ++$attempt;
+                            }
+                        } while ($attempt <= 5);
+                    }
+
+                    break;
+
+                case 'C':
+                    $this->clean();
+                    break;
+            }
+        }
+
+        return [
+            'visited' => $this->visited,
+            'cleaned' => $this->cleaned,
+            'final' => $this->position + ['facing' => $this->direction],
+            'battery' => $this->battery,
+        ];
     }
 
     /**
      * Turn left from given position.
+     *
+     * @throws OutOfBatteryException
      *
      * @return self
      */
@@ -169,6 +258,8 @@ class CleaningRobot
     /**
      * Turn right from given position.
      *
+     * @throws OutOfBatteryException
+     *
      * @return self
      */
     public function turnRight() : self
@@ -186,11 +277,48 @@ class CleaningRobot
     /**
      * Advance one step from given position.
      *
-     * @return null
+     * @throws OutOfBatteryException
+     *
+     * @return self
      */
-    public function advance()
+    public function advance() : self
     {
-        // @TODO
+        if ($this->battery < 2) {
+            throw new OutOfBatteryException('Out of battery.');
+        }
+
+        $this->battery -= 2;
+
+        $nextX = $this->position['X'];
+        $nextY = $this->position['Y'];
+
+        switch ($this->direction) {
+            case self::DIRECTION_EAST:
+                $nextY += 1;
+                break;
+
+            case self::DIRECTION_WEST:
+                $nextY -= 1;
+                break;
+
+            case self::DIRECTION_NORTH:
+                $nextX -= 1;
+                break;
+
+            case self::DIRECTION_SOUTH:
+                $nextX += 1;
+                break;
+        }
+
+        if ($this->isObstacle($nextX, $nextY)) {
+            throw new ObstacleException('Obstacle on the way.');
+        }
+
+        $this->position = ['X' => $nextX, 'Y' => $nextY];
+
+        $this->saveUnique($this->visited, $this->position);
+
+        return $this;
     }
 
     /**
@@ -200,22 +328,138 @@ class CleaningRobot
      */
     public function back() : self
     {
-        // @TODO
+        if ($this->battery < 3) {
+            throw new OutOfBatteryException('Out of battery.');
+        }
+
+        $this->battery -= 3;
+
+        $nextX = $this->position['X'];
+        $nextY = $this->position['Y'];
+
+        switch ($this->direction) {
+            case self::DIRECTION_EAST:
+                $nextY -= 1;
+                break;
+
+            case self::DIRECTION_WEST:
+                $nextY += 1;
+                break;
+
+            case self::DIRECTION_NORTH:
+                $nextX += 1;
+                break;
+
+            case self::DIRECTION_SOUTH:
+                $nextX -= 1;
+                break;
+        }
+
+        if ($this->isObstacle($nextX, $nextY)) {
+            throw new ObstacleException('Cannot go back.');
+        }
+
+        $this->position = ['X' => $nextX, 'Y' => $nextY];
+
+        $this->saveUnique($this->visited, $this->position);
+
+        return $this;
     }
 
     /**
      * Clean current cell.
+     *
+     * @return self
      */
-    public function clean()
+    public function clean() : self
     {
-        // @TODO
+        if ($this->battery < 5) {
+            throw new OutOfBatteryException('Out of battery.');
+        }
+
+        $this->battery -= 5;
+
+        $this->saveUnique($this->cleaned, $this->position);
+
+        return $this;
     }
 
     /**
      * Back off in case of obstacle.
+     *
+     * @param int $attempt
+     *
+     * @return null
      */
-    protected function backOff()
+    protected function backOff(int $attempt)
     {
-        // @TODO
+        switch ($attempt) {
+            case 0:
+                $this->turnRight()->advance();
+                break;
+
+            case 1:
+                $this->turnLeft()->back()->turnRight()->advance();
+                break;
+
+            case 2:
+                $this->turnLeft()->turnLeft()->advance();
+                break;
+
+            case 3:
+                $this->turnRight()->back()->turnRight()->advance();
+                break;
+
+            case 4:
+                $this->turnLeft()->turnLeft()->advance();
+                break;
+
+            default:
+                throw new ObstacleException('Cannot back off');
+        }
+    }
+
+    /**
+     * Check if there is obstacle at given position.
+     *
+     * @param int $x
+     * @param int $y
+     *
+     * @return bool
+     */
+    public function isObstacle(int $x, int $y) : bool
+    {
+        $length = count($this->map[0]);
+
+        if ($x < 0 || $y < 0 || $x >= $length || $y >= $length) {
+            return true;
+        }
+
+        $context = $this->map[$x][$y];
+
+        if (is_null($context) || 'C' === $context) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Helper method to save unique value in array.
+     *
+     * @param array $source
+     * @param array $value
+     *
+     * @return void
+     */
+    protected function saveUnique(array &$source, array $value) : void
+    {
+        foreach ($source as $item) {
+            if ($item['X'] === $value['X'] && $item['Y'] === $value['Y']) {
+                return;
+            }
+        }
+
+        $source[] = $value;
     }
 }

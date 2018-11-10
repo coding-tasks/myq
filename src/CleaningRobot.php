@@ -30,6 +30,18 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
     /** @const string */
     const MOVEMENT_RIGHT = 'R';
 
+    /** @const string */
+    const COMMAND_TURN_LEFT = 'TL';
+
+    /** @const string */
+    const COMMAND_TURN_RIGHT = 'TR';
+
+    /** @const string */
+    const COMMAND_ADVANCE = 'A';
+
+    /** @const string */
+    const COMMAND_CLEAR = 'C';
+
     /** @const array */
     const DIRECTION_MAP = [
         self::DIRECTION_EAST => [
@@ -203,15 +215,15 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
     {
         foreach ($this->commands as $command) {
             switch ($command) {
-                case 'TL':
+                case self::COMMAND_TURN_LEFT:
                     $this->turnLeft();
                     break;
 
-                case 'TR':
+                case self::COMMAND_TURN_RIGHT:
                     $this->turnRight();
                     break;
 
-                case 'A':
+                case self::COMMAND_ADVANCE:
                     try {
                         $this->advance();
                     } catch (ObstacleException $e) {
@@ -229,7 +241,7 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
 
                     break;
 
-                case 'C':
+                case self::COMMAND_CLEAR:
                     $this->clean();
                     break;
             }

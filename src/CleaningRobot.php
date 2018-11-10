@@ -323,7 +323,7 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
 
         $this->position = ['X' => $nextX, 'Y' => $nextY];
 
-        $this->saveUnique($this->visited, $this->position);
+        $this->visited = saveUnique($this->visited, $this->position);
 
         return $this;
     }
@@ -368,7 +368,7 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
 
         $this->position = ['X' => $nextX, 'Y' => $nextY];
 
-        $this->saveUnique($this->visited, $this->position);
+        $this->visited = saveUnique($this->visited, $this->position);
 
         return $this;
     }
@@ -386,7 +386,7 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
 
         $this->battery -= 5;
 
-        $this->saveUnique($this->cleaned, $this->position);
+        $this->cleaned = saveUnique($this->cleaned, $this->position);
     }
 
     /**
@@ -447,24 +447,5 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
         }
 
         return false;
-    }
-
-    /**
-     * Helper method to save unique value in array.
-     *
-     * @param array $source
-     * @param array $value
-     *
-     * @return void
-     */
-    protected function saveUnique(array &$source, array $value) : void
-    {
-        foreach ($source as $item) {
-            if ($item['X'] === $value['X'] && $item['Y'] === $value['Y']) {
-                return;
-            }
-        }
-
-        $source[] = $value;
     }
 }

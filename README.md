@@ -1,10 +1,23 @@
-## MyQ Cleaning Robot
+# MyQ Cleaning Robot
 
 ### Installation
 
-Pull the package via composer.
+> The package is not in composer yet so if you want to install it via composer [follow these steps](https://getcomposer.org/doc/05-repositories.md#package-2).
+
+1. Clone the repo in your project directory.
+2. Run composer install (Requires php 7.1.3+).
+    ```shell
+    $ composer install
+    ```
+
+or if you already use docker, you can build it with docker-compose.
 ```shell
-$ composer require myq/cleaning-robot
+$ docker-compose up -d
+```
+
+Once the containers are up and running, you can either login to the bash and execute `cleaning_robot` command, or, you can directly execute it like shown below.
+```shell
+$ docker exec -it myq bash -c "./myq cleaning_robot ./source.json ./results.json"
 ```
 
 ### CLI Usage
@@ -50,17 +63,6 @@ Help:
 $bot = new MyQ\Robot($sourcePath);
 
 $output = $bot->run();
-```
-
-### Running the Project Locally
-Setup docker and docker-compose in your system if you haven't already.
-```shell
-$ docker-compose up -d
-```
-
-Once the containers are up and running, you can either login to the bash and execute `cleaning_robot` command, or, you can directly execute it like shown below.
-```shell
-$ docker exec -it myq bash -c "./myq cleaning_robot ./source.json ./results.json"
 ```
 
 ### Direction Map

@@ -31,7 +31,7 @@ class CleaningRobotTest extends TestCase
      * @covers ::__construct
      * @covers ::init
      *
-     * @expectedException \MyQ\Exception\FileException
+     * @expectedException \MyQ\Exceptions\FileException
      * @expectedExceptionMessage Invalid source file.
      */
     public function it_throws_file_exception_for_invalid_source_file()
@@ -45,7 +45,7 @@ class CleaningRobotTest extends TestCase
      * @covers ::__construct
      * @covers ::init
      *
-     * @expectedException \MyQ\Exception\FileException
+     * @expectedException \MyQ\Exceptions\FileException
      * @expectedExceptionMessage Invalid source json.
      */
     public function it_throws_file_exception_for_invalid_json_in_source_file()
@@ -115,6 +115,16 @@ class CleaningRobotTest extends TestCase
     /**
      * @test
      *
+     * @covers ::getCommands
+     */
+    public function it_gets_commands()
+    {
+        $this->assertEquals(["TL", "A", "C", "A", "C", "TR", "A", "C"], $this->robot->getCommands());
+    }
+
+    /**
+     * @test
+     *
      * @covers ::turnLeft
      * @covers ::getBattery
      * @covers ::getDirection
@@ -131,7 +141,7 @@ class CleaningRobotTest extends TestCase
      *
      * @covers ::turnLeft
      *
-     * @expectedException \MyQ\Exception\OutOfBatteryException
+     * @expectedException \MyQ\Exceptions\OutOfBatteryException
      * @expectedExceptionMessage Out of battery.
      */
     public function it_throws_out_of_battery_exception_when_turning_left()
@@ -159,7 +169,7 @@ class CleaningRobotTest extends TestCase
      *
      * @covers ::turnRight
      *
-     * @expectedException \MyQ\Exception\OutOfBatteryException
+     * @expectedException \MyQ\Exceptions\OutOfBatteryException
      * @expectedExceptionMessage Out of battery.
      */
     public function it_throws_out_of_battery_exception_when_turning_right()
@@ -259,7 +269,7 @@ class CleaningRobotTest extends TestCase
      *
      * @covers ::advance
      *
-     * @expectedException \MyQ\Exception\ObstacleException
+     * @expectedException \MyQ\Exceptions\ObstacleException
      * @expectedExceptionMessage Obstacle on the way.
      */
     public function it_hits_the_obstacle_during_advance()
@@ -272,7 +282,7 @@ class CleaningRobotTest extends TestCase
      *
      * @covers ::advance
      *
-     * @expectedException \MyQ\Exception\OutOfBatteryException
+     * @expectedException \MyQ\Exceptions\OutOfBatteryException
      * @expectedExceptionMessage Out of battery.
      */
     public function it_runs_out_of_battery_during_advance()
@@ -423,7 +433,7 @@ class CleaningRobotTest extends TestCase
      * @covers ::run
      * @covers ::backOff
      *
-     * @expectedException \MyQ\Exception\BackOffException
+     * @expectedException \MyQ\Exceptions\BackOffException
      * @expectedExceptionMessage Cannot back off.
      */
     public function it_throws_exception_if_all_back_off_strategy_fails()
@@ -446,7 +456,8 @@ class CleaningRobotTest extends TestCase
      */
     public function it_cleans_a_cell()
     {
-        $this->assertInstanceOf(CleaningRobot::class, $this->robot->clean());
+        $this->robot->clean();
+
         $this->assertEquals(75, $this->robot->getBattery());
         $this->assertEquals([['X' => 3, 'Y' => 0]], $this->robot->getCleaned());
     }
@@ -456,7 +467,7 @@ class CleaningRobotTest extends TestCase
      *
      * @covers ::clean
      *
-     * @expectedException \MyQ\Exception\OutOfBatteryException
+     * @expectedException \MyQ\Exceptions\OutOfBatteryException
      * @expectedExceptionMessage Out of battery.
      */
     public function it_throws_out_of_battery_exception_when_cleaning_cell()
@@ -522,7 +533,7 @@ class CleaningRobotTest extends TestCase
      *
      * @covers ::back
      *
-     * @expectedException \MyQ\Exception\ObstacleException
+     * @expectedException \MyQ\Exceptions\ObstacleException
      * @expectedExceptionMessage Cannot go back.
      */
     public function it_hits_the_obstacle_while_going_back()
@@ -535,7 +546,7 @@ class CleaningRobotTest extends TestCase
      *
      * @covers ::back
      *
-     * @expectedException \MyQ\Exception\OutOfBatteryException
+     * @expectedException \MyQ\Exceptions\OutOfBatteryException
      * @expectedExceptionMessage Out of battery.
      */
     public function it_runs_out_of_battery_when_going_back()

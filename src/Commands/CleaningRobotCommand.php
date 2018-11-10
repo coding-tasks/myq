@@ -3,9 +3,9 @@
 namespace MyQ\Commands;
 
 use MyQ\CleaningRobot;
-use MyQ\Exception\BackOffException;
-use MyQ\Exception\ObstacleException;
-use MyQ\Exception\OutOfBatteryException;
+use MyQ\Exceptions\BackOffException;
+use MyQ\Exceptions\ObstacleException;
+use MyQ\Exceptions\OutOfBatteryException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

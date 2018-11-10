@@ -2,12 +2,15 @@
 
 namespace MyQ;
 
-use MyQ\Exception\FileException;
-use MyQ\Exception\BackOffException;
-use MyQ\Exception\ObstacleException;
-use MyQ\Exception\OutOfBatteryException;
+use MyQ\Contracts\Runnable;
+use MyQ\Contracts\Walkable;
+use MyQ\Contracts\Cleanable;
+use MyQ\Exceptions\FileException;
+use MyQ\Exceptions\BackOffException;
+use MyQ\Exceptions\ObstacleException;
+use MyQ\Exceptions\OutOfBatteryException;
 
-class CleaningRobot
+class CleaningRobot implements Walkable, Cleanable, Runnable
 {
     /** @const string */
     const DIRECTION_EAST = 'E';
@@ -189,6 +192,16 @@ class CleaningRobot
     }
 
     /**
+     * Get commands.
+     *
+     * @return array
+     */
+    public function getCommands() : array
+    {
+        return $this->commands;
+    }
+
+    /**
      * Run commands in given order.
      *
      * @return array
@@ -242,9 +255,9 @@ class CleaningRobot
      *
      * @throws OutOfBatteryException
      *
-     * @return self
+     * @return Walkable
      */
-    public function turnLeft() : self
+    public function turnLeft() : Walkable
     {
         if ($this->battery < 1) {
             throw new OutOfBatteryException('Out of battery.');
@@ -261,9 +274,9 @@ class CleaningRobot
      *
      * @throws OutOfBatteryException
      *
-     * @return self
+     * @return Walkable
      */
-    public function turnRight() : self
+    public function turnRight() : Walkable
     {
         if ($this->battery < 1) {
             throw new OutOfBatteryException('Out of battery.');
@@ -280,9 +293,9 @@ class CleaningRobot
      *
      * @throws OutOfBatteryException
      *
-     * @return self
+     * @return Walkable
      */
-    public function advance() : self
+    public function advance() : Walkable
     {
         if ($this->battery < 2) {
             throw new OutOfBatteryException('Out of battery.');
@@ -325,9 +338,9 @@ class CleaningRobot
     /**
      * Go back without changing direction.
      *
-     * @return self
+     * @return Walkable
      */
-    public function back() : self
+    public function back() : Walkable
     {
         if ($this->battery < 3) {
             throw new OutOfBatteryException('Out of battery.');
@@ -370,9 +383,9 @@ class CleaningRobot
     /**
      * Clean current cell.
      *
-     * @return self
+     * @return void
      */
-    public function clean() : self
+    public function clean()
     {
         if ($this->battery < 5) {
             throw new OutOfBatteryException('Out of battery.');
@@ -381,8 +394,6 @@ class CleaningRobot
         $this->battery -= 5;
 
         $this->saveUnique($this->cleaned, $this->position);
-
-        return $this;
     }
 
     /**
@@ -390,9 +401,9 @@ class CleaningRobot
      *
      * @param int $attempt
      *
-     * @return null
+     * @return void
      */
-    protected function backOff(int $attempt)
+    public function backOff(int $attempt)
     {
         switch ($attempt) {
             case 0:

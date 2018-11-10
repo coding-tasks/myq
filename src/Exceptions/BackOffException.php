@@ -1,6 +1,6 @@
 <?php
 
-namespace MyQ\Exception;
+namespace MyQ\Exceptions;
 
 class BackOffException extends \RuntimeException
 {

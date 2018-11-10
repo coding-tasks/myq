@@ -6,8 +6,8 @@
     ["S", null, "S", "S"]
   ],
   "start": {
-    "X": 3,
-    "Y": 2,
+    "X": 2,
+    "Y": 3,
     "facing": "W"
   },
   "commands": ["A", "C"],

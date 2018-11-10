@@ -28,8 +28,8 @@ class SourceFileReaderTest extends TestCase
                 ['S', null, 'S', 'S'],
             ],
             'start' => [
-                'X' => 3,
-                'Y' => 0,
+                'X' => 0,
+                'Y' => 3,
                 'facing' => 'N',
             ],
             'commands' => ['TL', 'A', 'C', 'A', 'C', 'TR', 'A', 'C'],

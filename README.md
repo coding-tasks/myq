@@ -81,6 +81,27 @@ $output = $bot->run();
 | S (2, 0)  | S (2, 1)  | S (2, 2)  | S (2, 3)  |
 | S (3, 0)  | null (3, 1)  | S (3, 2)  | S (3, 3)  |
 
+##### Run 1: {Y: 0, X: 3, facing: north, battery: 80}
+**Commands:** TL, A, C, A, C, TR, A, C
+
+- **Start:** (0, 3) facing North, battery 80
+- **TL:** West, battery 79
+- **A:** (0, 2), battery 77
+- **C:** Cleaned (0, 2), battery 72
+- **A:** (0, 1) facing West, battery 70
+- **C:** Cleaned (0, 1), battery 65
+- **TR:** North, Obstacle, battery 64
+- **A:** Obstacle, battery 62
+    - **TR:** East, battery 61
+    - **A:** (0, 2) facing East, battery 59
+- **C:** Cleaned (0, 2), battery 54
+
+| Visited | Cleaned | Final | Battery |
+| ------- | ------- | ----- | -------- |
+| (0, 3), (0, 2), (0, 1) | (0, 2), (0, 1) | (0, 2) facing East | 54 |
+
+##### Run 2: {Y: 3, X: 0, facing: north, battery: 80}
+
 **Commands:** TL, A, C, A, C, TR, A, C
 
 - **Start:** (3, 0) facing North, battery 80

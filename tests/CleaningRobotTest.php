@@ -90,7 +90,7 @@ class CleaningRobotTest extends TestCase
      */
     public function it_gets_position()
     {
-        $this->assertEquals(['X' => 3, 'Y' => 0], $this->robot->getPosition());
+        $this->assertEquals(['X' => 0, 'Y' => 3], $this->robot->getPosition());
     }
 
     /**
@@ -100,7 +100,7 @@ class CleaningRobotTest extends TestCase
      */
     public function it_gets_visited_cells()
     {
-        $this->assertEquals([['X' => 3, 'Y' => 0]], $this->robot->getVisited());
+        $this->assertEquals([['X' => 0, 'Y' => 3]], $this->robot->getVisited());
     }
 
     /**
@@ -188,10 +188,10 @@ class CleaningRobotTest extends TestCase
     {
         $this->robot->advance();
 
-        $this->assertEquals($this->robot->getPosition(), ['X' => 2, 'Y' => 0]);
+        $this->assertEquals($this->robot->getPosition(), ['Y' => 2, 'X' => 0]);
         $this->assertEquals($this->robot->getVisited(), [
-            ['X' => 3, 'Y' => 0],
-            ['X' => 2, 'Y' => 0],
+            ['Y' => 3, 'X' => 0],
+            ['Y' => 2, 'X' => 0],
         ]);
         $this->assertEquals(78, $this->robot->getBattery());
 
@@ -209,11 +209,11 @@ class CleaningRobotTest extends TestCase
     {
         $robot->turnRight()->advance();
 
-        $this->assertEquals($robot->getPosition(), ['X' => 2, 'Y' => 1]);
+        $this->assertEquals($robot->getPosition(), ['X' => 1, 'Y' => 2]);
         $this->assertEquals($robot->getVisited(), [
-            ['X' => 3, 'Y' => 0],
-            ['X' => 2, 'Y' => 0],
-            ['X' => 2, 'Y' => 1],
+            ['X' => 0, 'Y' => 3],
+            ['X' => 0, 'Y' => 2],
+            ['X' => 1, 'Y' => 2],
         ]);
         $this->assertEquals('E', $robot->getDirection());
         $this->assertEquals(75, $robot->getBattery());
@@ -232,11 +232,11 @@ class CleaningRobotTest extends TestCase
     {
         $robot->turnLeft()->turnLeft()->advance();
 
-        $this->assertEquals($robot->getPosition(), ['X' => 2, 'Y' => 0]);
+        $this->assertEquals($robot->getPosition(), ['X' => 0, 'Y' => 2]);
         $this->assertEquals($robot->getVisited(), [
-            ['X' => 3, 'Y' => 0],
-            ['X' => 2, 'Y' => 0],
-            ['X' => 2, 'Y' => 1],
+            ['X' => 0, 'Y' => 3],
+            ['X' => 0, 'Y' => 2],
+            ['X' => 1, 'Y' => 2],
         ]);
         $this->assertEquals('W', $robot->getDirection());
         $this->assertEquals(71, $robot->getBattery());
@@ -255,11 +255,11 @@ class CleaningRobotTest extends TestCase
     {
         $robot->turnLeft()->advance();
 
-        $this->assertEquals($robot->getPosition(), ['X' => 3, 'Y' => 0]);
+        $this->assertEquals($robot->getPosition(), ['X' => 0, 'Y' => 3]);
         $this->assertEquals($robot->getVisited(), [
-            ['X' => 3, 'Y' => 0],
-            ['X' => 2, 'Y' => 0],
-            ['X' => 2, 'Y' => 1],
+            ['X' => 0, 'Y' => 3],
+            ['X' => 0, 'Y' => 2],
+            ['X' => 1, 'Y' => 2],
         ]);
         $this->assertEquals('S', $robot->getDirection());
         $this->assertEquals(68, $robot->getBattery());
@@ -320,14 +320,14 @@ class CleaningRobotTest extends TestCase
 
         $this->assertEquals($this->robot->getPosition(), ['X' => 1, 'Y' => 1]);
         $this->assertEquals($this->robot->getVisited(), [
-            ['X' => 3, 'Y' => 0],
-            ['X' => 2, 'Y' => 0],
-            ['X' => 1, 'Y' => 0],
+            ['X' => 0, 'Y' => 3],
+            ['X' => 0, 'Y' => 2],
+            ['X' => 0, 'Y' => 1],
             ['X' => 1, 'Y' => 1],
         ]);
         $this->assertEquals($this->robot->getCleaned(), [
-            ['X' => 2, 'Y' => 0],
-            ['X' => 1, 'Y' => 0],
+            ['X' => 0, 'Y' => 2],
+            ['X' => 0, 'Y' => 1],
             ['X' => 1, 'Y' => 1],
         ]);
         $this->assertEquals(54, $this->robot->getBattery());
@@ -346,13 +346,13 @@ class CleaningRobotTest extends TestCase
 
         $robot->run();
 
-        $this->assertEquals($robot->getPosition(), ['X' => 2, 'Y' => 3]);
+        $this->assertEquals($robot->getPosition(), ['X' => 3, 'Y' => 2]);
         $this->assertEquals($robot->getVisited(), [
-            ['X' => 3, 'Y' => 2],
-            ['X' => 3, 'Y' => 3],
             ['X' => 2, 'Y' => 3],
+            ['X' => 3, 'Y' => 3],
+            ['X' => 3, 'Y' => 2],
         ]);
-        $this->assertEquals($robot->getCleaned(), [['X' => 2, 'Y' => 3]]);
+        $this->assertEquals($robot->getCleaned(), [['X' => 3, 'Y' => 2]]);
         $this->assertEquals(83, $robot->getBattery());
         $this->assertEquals('N', $robot->getDirection());
     }
@@ -369,13 +369,13 @@ class CleaningRobotTest extends TestCase
 
         $robot->run();
 
-        $this->assertEquals($robot->getPosition(), ['X' => 1, 'Y' => 0]);
+        $this->assertEquals($robot->getPosition(), ['X' => 0, 'Y' => 1]);
         $this->assertEquals($robot->getVisited(), [
-            ['X' => 0, 'Y' => 1],
-            ['X' => 1, 'Y' => 1],
             ['X' => 1, 'Y' => 0],
+            ['X' => 1, 'Y' => 1],
+            ['X' => 0, 'Y' => 1],
         ]);
-        $this->assertEquals($robot->getCleaned(), [['X' => 1, 'Y' => 0]]);
+        $this->assertEquals($robot->getCleaned(), [['X' => 0, 'Y' => 1]]);
         $this->assertEquals(79, $robot->getBattery());
         $this->assertEquals('W', $robot->getDirection());
     }
@@ -394,9 +394,9 @@ class CleaningRobotTest extends TestCase
 
         $this->assertEquals($robot->getPosition(), ['X' => 2, 'Y' => 2]);
         $this->assertEquals($robot->getVisited(), [
-            ['X' => 0, 'Y' => 1],
+            ['X' => 1, 'Y' => 0],
             ['X' => 1, 'Y' => 1],
-            ['X' => 2, 'Y' => 1],
+            ['X' => 1, 'Y' => 2],
             ['X' => 2, 'Y' => 2],
         ]);
         $this->assertEquals($robot->getCleaned(), [['X' => 2, 'Y' => 2]]);
@@ -416,14 +416,14 @@ class CleaningRobotTest extends TestCase
 
         $robot->run();
 
-        $this->assertEquals($robot->getPosition(), ['X' => 2, 'Y' => 0]);
+        $this->assertEquals($robot->getPosition(), ['X' => 0, 'Y' => 2]);
         $this->assertEquals($robot->getVisited(), [
-            ['X' => 0, 'Y' => 1],
+            ['X' => 1, 'Y' => 0],
             ['X' => 1, 'Y' => 1],
-            ['X' => 2, 'Y' => 1],
-            ['X' => 2, 'Y' => 0],
+            ['X' => 1, 'Y' => 2],
+            ['X' => 0, 'Y' => 2],
         ]);
-        $this->assertEquals($robot->getCleaned(), [['X' => 2, 'Y' => 0]]);
+        $this->assertEquals($robot->getCleaned(), [['X' => 0, 'Y' => 2]]);
         $this->assertEquals(68, $robot->getBattery());
         $this->assertEquals('W', $robot->getDirection());
     }
@@ -460,7 +460,7 @@ class CleaningRobotTest extends TestCase
         $this->robot->clean();
 
         $this->assertEquals(75, $this->robot->getBattery());
-        $this->assertEquals([['X' => 3, 'Y' => 0]], $this->robot->getCleaned());
+        $this->assertEquals([['X' => 0, 'Y' => 3]], $this->robot->getCleaned());
     }
 
     /**
@@ -486,7 +486,7 @@ class CleaningRobotTest extends TestCase
     {
         $this->robot->advance()->turnRight()->advance()->back();
 
-        $this->assertEquals(['X' => 2, 'Y' => 0], $this->robot->getPosition());
+        $this->assertEquals(['X' => 0, 'Y' => 2], $this->robot->getPosition());
         $this->assertEquals(72, $this->robot->getBattery());
     }
 
@@ -512,7 +512,7 @@ class CleaningRobotTest extends TestCase
     {
         $this->robot->advance()->advance()->advance()->turnRight()->advance()->turnRight()->advance()->back();
 
-        $this->assertEquals(['X' => 0, 'Y' => 1], $this->robot->getPosition());
+        $this->assertEquals(['X' => 1, 'Y' => 0], $this->robot->getPosition());
         $this->assertEquals(65, $this->robot->getBattery());
     }
 
@@ -525,7 +525,7 @@ class CleaningRobotTest extends TestCase
     {
         $this->robot->advance()->back();
 
-        $this->assertEquals(['X' => 3, 'Y' => 0], $this->robot->getPosition());
+        $this->assertEquals(['X' => 0, 'Y' => 3], $this->robot->getPosition());
         $this->assertEquals(75, $this->robot->getBattery());
     }
 

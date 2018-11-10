@@ -114,7 +114,12 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
         $this->battery   = $input['battery'];
         $this->commands  = $input['commands'];
         $this->direction = $input['start']['facing'];
-        $this->position  = ['X' => $input['start']['X'], 'Y' => $input['start']['Y']];
+
+        $this->position = [
+            'X' => $input['start']['X'],
+            'Y' => $input['start']['Y'],
+        ];
+
         $this->visited[] = $this->position;
     }
 
@@ -308,32 +313,32 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
 
         $this->battery -= 2;
 
-        $nextX = $this->position['X'];
-        $nextY = $this->position['Y'];
+        $nextRow = $this->position['Y'];
+        $nextCol = $this->position['X'];
 
         switch ($this->direction) {
             case self::DIRECTION_EAST:
-                $nextY += 1;
+                $nextCol += 1;
                 break;
 
             case self::DIRECTION_WEST:
-                $nextY -= 1;
+                $nextCol -= 1;
                 break;
 
             case self::DIRECTION_NORTH:
-                $nextX -= 1;
+                $nextRow -= 1;
                 break;
 
             case self::DIRECTION_SOUTH:
-                $nextX += 1;
+                $nextRow += 1;
                 break;
         }
 
-        if ($this->isObstacle($nextX, $nextY)) {
+        if ($this->isObstacle($nextRow, $nextCol)) {
             throw new ObstacleException('Obstacle on the way.');
         }
 
-        $this->position = ['X' => $nextX, 'Y' => $nextY];
+        $this->position = ['X' => $nextCol, 'Y' => $nextRow];
 
         $this->visited = saveUnique($this->visited, $this->position);
 
@@ -353,32 +358,32 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
 
         $this->battery -= 3;
 
-        $nextX = $this->position['X'];
-        $nextY = $this->position['Y'];
+        $nextRow = $this->position['Y'];
+        $nextCol = $this->position['X'];
 
         switch ($this->direction) {
             case self::DIRECTION_EAST:
-                $nextY -= 1;
+                $nextCol -= 1;
                 break;
 
             case self::DIRECTION_WEST:
-                $nextY += 1;
+                $nextCol += 1;
                 break;
 
             case self::DIRECTION_NORTH:
-                $nextX += 1;
+                $nextRow += 1;
                 break;
 
             case self::DIRECTION_SOUTH:
-                $nextX -= 1;
+                $nextRow -= 1;
                 break;
         }
 
-        if ($this->isObstacle($nextX, $nextY)) {
+        if ($this->isObstacle($nextRow, $nextCol)) {
             throw new ObstacleException('Cannot go back.');
         }
 
-        $this->position = ['X' => $nextX, 'Y' => $nextY];
+        $this->position = ['X' => $nextCol, 'Y' => $nextRow];
 
         $this->visited = saveUnique($this->visited, $this->position);
 

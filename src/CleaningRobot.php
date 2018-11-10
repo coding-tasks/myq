@@ -5,7 +5,7 @@ namespace MyQ;
 use MyQ\Contracts\Runnable;
 use MyQ\Contracts\Walkable;
 use MyQ\Contracts\Cleanable;
-use MyQ\Exceptions\FileException;
+use MyQ\Contracts\FileReader;
 use MyQ\Exceptions\BackOffException;
 use MyQ\Exceptions\ObstacleException;
 use MyQ\Exceptions\OutOfBatteryException;
@@ -50,8 +50,8 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
         ],
     ];
 
-    /** @var string Source file. */
-    protected $source;
+    /** @var FileReader Source file reader. */
+    protected $reader;
 
     /** @var array Floor structure. */
     protected $map;
@@ -77,11 +77,11 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
     /**
      * CleaningRobot constructor.
      *
-     * @param string $source
+     * @param FileReader $reader
      */
-    public function __construct(string $source)
+    public function __construct(FileReader $reader)
     {
-        $this->source = $source;
+        $this->reader = $reader;
 
         $this->init();
     }
@@ -93,23 +93,16 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
      */
     private function init()
     {
-        $json = @file_get_contents($this->source);
+        $input = $this->reader->read();
+        $rules = ['map', 'start.X', 'start.Y', 'start.facing', 'commands', 'battery'];
 
-        if ( ! $json) {
-            throw new FileException('Invalid source file.');
-        }
+        $this->reader->validate($input, $rules);
 
-        $input = json_decode($json);
-
-        if ( ! $input) {
-            throw new FileException('Invalid source json.');
-        }
-
-        $this->map       = $input->map;
-        $this->battery   = $input->battery;
-        $this->commands  = $input->commands;
-        $this->direction = $input->start->facing;
-        $this->position  = ['X' => $input->start->X, 'Y' => $input->start->Y];
+        $this->map       = $input['map'];
+        $this->battery   = $input['battery'];
+        $this->commands  = $input['commands'];
+        $this->direction = $input['start']['facing'];
+        $this->position  = ['X' => $input['start']['X'], 'Y' => $input['start']['Y']];
         $this->visited[] = $this->position;
     }
 

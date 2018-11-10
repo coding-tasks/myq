@@ -3,6 +3,7 @@
 namespace MyQ\Test;
 
 use MyQ\CleaningRobot;
+use MyQ\SourceFileReader;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,7 +21,7 @@ class CleaningRobotTest extends TestCase
      */
     public function setUp()
     {
-        $this->robot = new CleaningRobot(__DIR__ . '/Fixtures/source.json');
+        $this->robot = new CleaningRobot(new SourceFileReader(__DIR__ . '/Fixtures/source.json'));
 
         parent::setUp();
     }
@@ -36,7 +37,7 @@ class CleaningRobotTest extends TestCase
      */
     public function it_throws_file_exception_for_invalid_source_file()
     {
-        new CleaningRobot('/invalid/file');
+        new CleaningRobot(new SourceFileReader(__DIR__ . '/Fixtures/invalid/file'));
     }
 
     /**
@@ -50,7 +51,7 @@ class CleaningRobotTest extends TestCase
      */
     public function it_throws_file_exception_for_invalid_json_in_source_file()
     {
-        new CleaningRobot(__DIR__ . '/Fixtures/invalid.json');
+        new CleaningRobot(new SourceFileReader(__DIR__ . '/Fixtures/invalid.json'));
     }
 
     /**
@@ -119,7 +120,7 @@ class CleaningRobotTest extends TestCase
      */
     public function it_gets_commands()
     {
-        $this->assertEquals(["TL", "A", "C", "A", "C", "TR", "A", "C"], $this->robot->getCommands());
+        $this->assertEquals(['TL', 'A', 'C', 'A', 'C', 'TR', 'A', 'C'], $this->robot->getCommands());
     }
 
     /**
@@ -341,7 +342,7 @@ class CleaningRobotTest extends TestCase
      */
     public function it_backs_off_in_obstacle()
     {
-        $robot = new CleaningRobot(__DIR__ . '/Fixtures/obstacle.json');
+        $robot = new CleaningRobot(new SourceFileReader(__DIR__ . '/Fixtures/obstacle.json'));
 
         $robot->run();
 
@@ -364,7 +365,7 @@ class CleaningRobotTest extends TestCase
      */
     public function it_backs_off_in_consecutive_obstacles()
     {
-        $robot = new CleaningRobot(__DIR__ . '/Fixtures/obstacle2.json');
+        $robot = new CleaningRobot(new SourceFileReader(__DIR__ . '/Fixtures/obstacle2.json'));
 
         $robot->run();
 
@@ -387,7 +388,7 @@ class CleaningRobotTest extends TestCase
      */
     public function it_backs_off_in_multiple_consecutive_obstacles()
     {
-        $robot = new CleaningRobot(__DIR__ . '/Fixtures/obstacle3.json');
+        $robot = new CleaningRobot(new SourceFileReader(__DIR__ . '/Fixtures/obstacle3.json'));
 
         $robot->run();
 
@@ -411,7 +412,7 @@ class CleaningRobotTest extends TestCase
      */
     public function it_runs_all_back_off_strategies()
     {
-        $robot = new CleaningRobot(__DIR__ . '/Fixtures/obstacle4.json');
+        $robot = new CleaningRobot(new SourceFileReader(__DIR__ . '/Fixtures/obstacle4.json'));
 
         $robot->run();
 
@@ -438,7 +439,7 @@ class CleaningRobotTest extends TestCase
      */
     public function it_throws_exception_if_all_back_off_strategy_fails()
     {
-        $robot = new CleaningRobot(__DIR__ . '/Fixtures/backoff.json');
+        $robot = new CleaningRobot(new SourceFileReader(__DIR__ . '/Fixtures/backoff.json'));
 
         $robot->run();
 

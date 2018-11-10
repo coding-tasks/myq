@@ -3,6 +3,7 @@
 namespace MyQ\Commands;
 
 use MyQ\CleaningRobot;
+use MyQ\SourceFileReader;
 use MyQ\Exceptions\BackOffException;
 use MyQ\Exceptions\ObstacleException;
 use MyQ\Exceptions\OutOfBatteryException;
@@ -48,7 +49,7 @@ class CleaningRobotCommand extends Command
         $source = $input->getArgument('source');
         $result = $input->getArgument('result');
 
-        $robot = new CleaningRobot($source);
+        $robot = new CleaningRobot(new SourceFileReader($source));
 
         try {
             $metrics = $robot->run();

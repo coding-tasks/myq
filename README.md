@@ -60,7 +60,7 @@ Help:
 
 ### Using as a Library
 ```php
-$bot = new MyQ\Robot($sourcePath);
+$bot = new MyQ\Robot(new MyQ\SourceFileReader($sourcePath));
 
 $output = $bot->run();
 ```

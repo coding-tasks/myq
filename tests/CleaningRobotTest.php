@@ -129,6 +129,7 @@ class CleaningRobotTest extends TestCase
      * @covers ::turnLeft
      * @covers ::getBattery
      * @covers ::getDirection
+     * @covers ::consumeBattery
      */
     public function it_turns_left()
     {
@@ -141,6 +142,7 @@ class CleaningRobotTest extends TestCase
      * @test
      *
      * @covers ::turnLeft
+     * @covers ::consumeBattery
      *
      * @expectedException \MyQ\Exceptions\OutOfBatteryException
      * @expectedExceptionMessage Out of battery.
@@ -157,6 +159,7 @@ class CleaningRobotTest extends TestCase
      * @covers ::turnRight
      * @covers ::getBattery
      * @covers ::getDirection
+     * @covers ::consumeBattery
      */
     public function it_turns_right()
     {
@@ -169,6 +172,7 @@ class CleaningRobotTest extends TestCase
      * @test
      *
      * @covers ::turnRight
+     * @covers ::consumeBattery
      *
      * @expectedException \MyQ\Exceptions\OutOfBatteryException
      * @expectedExceptionMessage Out of battery.
@@ -183,6 +187,7 @@ class CleaningRobotTest extends TestCase
      * @test
      *
      * @covers ::advance
+     * @covers ::consumeBattery
      */
     public function it_advances_north() : CleaningRobot
     {
@@ -202,6 +207,7 @@ class CleaningRobotTest extends TestCase
      * @test
      *
      * @covers ::advance
+     * @covers ::consumeBattery
      *
      * @depends it_advances_north
      */
@@ -225,6 +231,7 @@ class CleaningRobotTest extends TestCase
      * @test
      *
      * @covers ::advance
+     * @covers ::consumeBattery
      *
      * @depends it_advances_east
      */
@@ -248,6 +255,7 @@ class CleaningRobotTest extends TestCase
      * @test
      *
      * @covers ::advance
+     * @covers ::consumeBattery
      *
      * @depends it_advances_west
      */
@@ -269,6 +277,7 @@ class CleaningRobotTest extends TestCase
      * @test
      *
      * @covers ::advance
+     * @covers ::consumeBattery
      *
      * @expectedException \MyQ\Exceptions\ObstacleException
      * @expectedExceptionMessage Obstacle on the way.
@@ -282,6 +291,7 @@ class CleaningRobotTest extends TestCase
      * @test
      *
      * @covers ::advance
+     * @covers ::consumeBattery
      *
      * @expectedException \MyQ\Exceptions\OutOfBatteryException
      * @expectedExceptionMessage Out of battery.
@@ -454,6 +464,7 @@ class CleaningRobotTest extends TestCase
      * @test
      *
      * @covers ::clean
+     * @covers ::consumeBattery
      */
     public function it_cleans_a_cell()
     {
@@ -467,6 +478,7 @@ class CleaningRobotTest extends TestCase
      * @test
      *
      * @covers ::clean
+     * @covers ::consumeBattery
      *
      * @expectedException \MyQ\Exceptions\OutOfBatteryException
      * @expectedExceptionMessage Out of battery.
@@ -481,6 +493,7 @@ class CleaningRobotTest extends TestCase
      * @test
      *
      * @covers ::back
+     * @covers ::consumeBattery
      */
     public function it_goes_back_from_east_to_west()
     {
@@ -494,6 +507,7 @@ class CleaningRobotTest extends TestCase
      * @test
      *
      * @covers ::back
+     * @covers ::consumeBattery
      */
     public function it_goes_back_from_west_to_east()
     {
@@ -507,6 +521,7 @@ class CleaningRobotTest extends TestCase
      * @test
      *
      * @covers ::back
+     * @covers ::consumeBattery
      */
     public function it_goes_back_from_south_to_north()
     {
@@ -520,6 +535,7 @@ class CleaningRobotTest extends TestCase
      * @test
      *
      * @covers ::back
+     * @covers ::consumeBattery
      */
     public function it_goes_back_from_north_to_south()
     {
@@ -533,6 +549,7 @@ class CleaningRobotTest extends TestCase
      * @test
      *
      * @covers ::back
+     * @covers ::consumeBattery
      *
      * @expectedException \MyQ\Exceptions\ObstacleException
      * @expectedExceptionMessage Cannot go back.
@@ -546,6 +563,7 @@ class CleaningRobotTest extends TestCase
      * @test
      *
      * @covers ::back
+     * @covers ::consumeBattery
      *
      * @expectedException \MyQ\Exceptions\OutOfBatteryException
      * @expectedExceptionMessage Out of battery.

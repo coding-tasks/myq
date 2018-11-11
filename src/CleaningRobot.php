@@ -261,6 +261,22 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
     }
 
     /**
+     * Consume battery based on action.
+     *
+     * @param int $threshold
+     *
+     * @return void
+     */
+    private function consumeBattery(int $threshold) : void
+    {
+        if ($this->battery < $threshold) {
+            throw new OutOfBatteryException('Out of battery.');
+        }
+
+        $this->battery -= $threshold;
+    }
+
+    /**
      * Turn left from given position.
      *
      * @throws OutOfBatteryException
@@ -269,11 +285,8 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
      */
     public function turnLeft() : Walkable
     {
-        if ($this->battery < 1) {
-            throw new OutOfBatteryException('Out of battery.');
-        }
+        $this->consumeBattery(1);
 
-        $this->battery   -= 1;
         $this->direction = self::DIRECTION_MAP[$this->direction][self::MOVEMENT_LEFT];
 
         return $this;
@@ -288,11 +301,8 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
      */
     public function turnRight() : Walkable
     {
-        if ($this->battery < 1) {
-            throw new OutOfBatteryException('Out of battery.');
-        }
+        $this->consumeBattery(1);
 
-        $this->battery   -= 1;
         $this->direction = self::DIRECTION_MAP[$this->direction][self::MOVEMENT_RIGHT];
 
         return $this;
@@ -307,11 +317,7 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
      */
     public function advance() : Walkable
     {
-        if ($this->battery < 2) {
-            throw new OutOfBatteryException('Out of battery.');
-        }
-
-        $this->battery -= 2;
+        $this->consumeBattery(2);
 
         $nextRow = $this->position['Y'];
         $nextCol = $this->position['X'];
@@ -352,11 +358,7 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
      */
     public function back() : Walkable
     {
-        if ($this->battery < 3) {
-            throw new OutOfBatteryException('Out of battery.');
-        }
-
-        $this->battery -= 3;
+        $this->consumeBattery(3);
 
         $nextRow = $this->position['Y'];
         $nextCol = $this->position['X'];
@@ -397,11 +399,7 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
      */
     public function clean()
     {
-        if ($this->battery < 5) {
-            throw new OutOfBatteryException('Out of battery.');
-        }
-
-        $this->battery -= 5;
+        $this->consumeBattery(5);
 
         $this->cleaned = saveUnique($this->cleaned, $this->position);
     }
@@ -451,13 +449,8 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
      */
     public function isObstacle(int $x, int $y) : bool
     {
-        $length = count($this->map[0]);
-
-        if ($x < 0 || $y < 0 || $x >= $length || $y >= $length) {
-            return true;
-        }
-
-        $context = $this->map[$x][$y];
+        // Also covers: $x < 0 || $y < 0 || $x >= $length || $y >= $length
+        $context = $this->map[$x][$y] ?? null;
 
         if (is_null($context) || 'C' === $context) {
             return true;

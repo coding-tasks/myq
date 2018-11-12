@@ -60,9 +60,13 @@ Help:
 
 ### Using as a Library
 ```php
-$bot = new MyQ\Robot(new MyQ\SourceFileReader($sourcePath));
+$bot = new MyQ\CleaningRobot(new MyQ\SourceFileReader($sourcePath));
 
-$output = $bot->run();
+try {
+    $output = $bot->run();
+} catch (OutOfBatteryException | ObstacleException | BackOffException $e) {
+    // Log error.
+}
 ```
 
 ### Direction Map

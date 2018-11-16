@@ -99,7 +99,7 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
     }
 
     /**
-     * Initialize method.
+     * Initialize.
      *
      * @return void
      */
@@ -134,7 +134,7 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
     }
 
     /**
-     * Get battery.
+     * Set battery.
      *
      * @param int $battery
      *
@@ -158,7 +158,7 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
     }
 
     /**
-     * Get battery.
+     * Set direction.
      *
      * @param string $direction
      *
@@ -172,7 +172,7 @@ class CleaningRobot implements Walkable, Cleanable, Runnable
     }
 
     /**
-     * Get direction.
+     * Get position.
      *
      * @return array
      */
